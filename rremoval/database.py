@@ -1,3 +1,4 @@
+#!/usr/bin/python
 # Copyright (C) 2015 Bitergia
 #
 # This program is free software; you can redistribute it and/or modify
@@ -16,3 +17,32 @@
 #
 # Authors:
 #   Daniel Izquierdo Cortazar <dizquierdo@bitergia.com>
+
+import MySQLdb
+
+class Database(object):
+    """ Class to deal with database access
+
+    This is dependant from MySQL
+    """
+
+    def __init__(self, dbuser, dbpassword, dbname, hostname="localhost", port=3306):
+        """ Start session and init database variables """
+
+        self.db = MySQLdb.connect(host=hostname,
+                             port=int(port),
+                             user=dbuser,
+                             passwd=dbpassword,
+                             db=dbname)
+        self.cursor = self.db.cursor
+
+    def execute(self, query):
+        """ Execute query in the current session"""
+
+        data = cursor.execute(query)
+        return data
+
+    def close_session(self):
+        """ Close database session"""
+        self.db.close()
+

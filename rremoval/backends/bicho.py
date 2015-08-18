@@ -1,3 +1,4 @@
+#!/usr/bin/python
 # Copyright (C) 2015 Bitergia
 #
 # This program is free software; you can redistribute it and/or modify
@@ -16,3 +17,8 @@
 #
 # Authors:
 #   Daniel Izquierdo Cortazar <dizquierdo@bitergia.com>
+
+from rremoval.backends import Backend
+
+class Bicho(Backend):
+    pass

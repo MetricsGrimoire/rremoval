@@ -22,6 +22,18 @@ from argparse import ArgumentParser
 
 import rremoval.backends as backends
 
+from rremoval.backends.bicho import Bicho
+from rremoval.backends.cvsanaly import CVSAnalY
+from rremoval.backends.eventizer import Eventizer
+from rremoval.backends.ircanalysis import IRC
+from rremoval.backends.mlstats import MLStats
+from rremoval.backends.pullpo import Pullpo
+from rremoval.backends.sibyl import Sibyl
+from rremoval.backends.wikianalysis import Wiki
+
+
+from rremoval.database import Database
+
 def read_options():
     """ Read command line options"""
 
@@ -42,7 +54,7 @@ def read_options():
     parser.add_argument("-b", "--backend",
                         action="store",
                         dest="backend",
-                        help="Backend: cvsanaly, bicho, mlstats, pullpo, wiki, irc")
+                        help="Backend: bicho, cvsanaly, eventizer, irc, mlstats, pullpo, sibyl, wiki")
     parser.add_argument("-l", "--list-repositories",
                         action="store_true",
                         dest="backends_list",
@@ -71,8 +83,46 @@ def read_options():
 
     return args
 
+def init_backend(args, dbsession):
+    """ Initiate backends and return a generic backend"""
+
+    if args.backend == backends.BICHO:
+        backend = Bicho(dbsession)
+    elif args.backend == backends.CVSANALY:
+        backend = CVSAnalY(dbsession)
+    elif args.backend == backends.EVENTIZER:
+        backend = Eventizer(dbsession)
+    elif args.backend == backends.IRC:
+        backend = IRC(dbsession)
+    elif args.backend == backends.MLSTATS:
+        backend = MLStats(dbsession)
+    elif args.backend == backends.PULLPO:
+        backend = Pullpo(dbsession)
+    elif args.backend == backends.SIBYL:
+        backend = Sibyl(dbsession)
+    elif args.backend == backends.WIKI:
+        backend = Wiki(dbsession)
+
+    return backend
+
 if __name__ == '__main__':
 
+    # Read command line options
     args = read_options()
 
+    # Init database session
+    dbsession = Database(args.dbuser, args.dbpassword, args.dbname)
 
+    # Init specific backend
+    backend = init_backend(args, dbsession)
+
+    # Executing actions
+    if args.backends_list:
+        # Listing backends
+        backend.repositories_list()
+    if args.repository:
+        # Removing repository
+        backend.repository_removal(args.repository)
+
+    # Close database session
+    db_session.close_session()
