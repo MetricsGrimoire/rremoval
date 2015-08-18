@@ -29,4 +29,33 @@ class Bicho(Backend):
         print trackers
 
     def repository_removal(self, repository):
-        pass
+
+        # Remove Trackers
+        query = """ DELETE FROM trackers
+                    WHERE url = '%s' """ % (repository)
+        self.session.execute(query)
+
+        # Remove Issues
+        query = """ DELETE FROM issues
+                    WHERE tracker_id not in (
+                        SELECT distinct(id)
+                        FROM trackers)
+                """
+        self.session.execute(query)
+
+        # Remove Changes
+        query = """ DELETE FROM changes
+                    WHERE issue_id not in (
+                        SELECT distinct(id)
+                        FROM issues)
+                """
+        self.session.execute(query)
+
+        # Remove Comments
+        query = """ DELETE FROM comments
+                    WHERE issue_id not in (
+                        SELECT distinct(id)
+                        FROM issues)
+                """
+        self.session.execute(query)
+
