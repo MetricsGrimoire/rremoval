@@ -23,9 +23,11 @@ from rremoval.backends import Backend
 class Wiki(Backend):
 
     def repositories_list(self):
-        # It does not make sense to implement this 
+        # It does not make sense to implement this
         # Sibyl does not support trackers
         raise NotImplementedError
 
     def repository_removal(self, repository):
-        # It does not make sense this method.                    
+        # It does not make sense this method.
+        raise NotImplementedError
+
