@@ -21,4 +21,12 @@
 from rremoval.backends import Backend
 
 class IRC(Backend):
-    pass
+
+    def repositories_list(self):
+        query = """SELECT name
+                   FROM channels"""
+        channels = self.session.execute(query)
+        print channels
+
+    def repository_removal(self, repository):
+        pass

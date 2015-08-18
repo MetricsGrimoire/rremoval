@@ -21,4 +21,12 @@
 from rremoval.backends import Backend
 
 class Eventizer(Backend):
-    pass
+
+    def repositories_list(self):
+        query = """SELECT event_url
+                   FROM events"""
+        trackers = self.session.execute(query)
+        print trackers
+
+    def repository_removal(self, repository):
+       pass

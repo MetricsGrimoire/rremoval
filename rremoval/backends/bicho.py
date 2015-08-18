@@ -21,4 +21,12 @@
 from rremoval.backends import Backend
 
 class Bicho(Backend):
-    pass
+
+    def repositories_list(self):
+        query = """SELECT url
+                   FROM trackers"""
+        trackers = self.session.execute(query)
+        print trackers
+
+    def repository_removal(self, repository):
+        pass

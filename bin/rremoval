@@ -76,8 +76,8 @@ def read_options():
     if not args.backends_list and not args.repository:
         parser.error("--list-repositories or --remove-repository options should be enabled")
 
-    backends_list = [backends.CVSANALY, backends.BICHO, backends.MLSTATS, backends.PULLPO,
-                     backends.WIKI, backends.IRC]
+    backends_list = [backends.BICHO, backends.CVSANALY, backends.EVENTIZER, backends.IRC,
+                     backends.MLSTATS, backends.PULLPO, backends.SIBYL, backends.WIKI]
     if not args.backend in backends_list:
         parser.error("Selected backend not found")
 
@@ -125,4 +125,4 @@ if __name__ == '__main__':
         backend.repository_removal(args.repository)
 
     # Close database session
-    db_session.close_session()
+    dbsession.close_session()

@@ -21,4 +21,12 @@
 from rremoval.backends import Backend
 
 class MLStats(Backend):
-    pass
+
+    def repositories_list(self):
+        query = """SELECT mailing_list_url
+                   FROM mailing_lists"""
+        mailing_lists = self.session.execute(query)
+        print mailing_lists
+
+    def repository_removal(self, repository):
+        pass

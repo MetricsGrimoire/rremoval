@@ -21,4 +21,13 @@
 from rremoval.backends import Backend
 
 class Pullpo(Backend):
-    pass
+
+    def repositories_list(self):
+       query = """SELECT repository
+                  FROM repositories"""
+       repositories = self.session.execute(query)
+       print repositories
+
+    def repository_removal(self, repository):
+        pass
+

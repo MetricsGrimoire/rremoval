@@ -34,12 +34,24 @@ class Database(object):
                              user=dbuser,
                              passwd=dbpassword,
                              db=dbname)
-        self.cursor = self.db.cursor
+        self.cursor = self.db.cursor()
 
     def execute(self, query):
         """ Execute query in the current session"""
 
-        data = cursor.execute(query)
+        data =[]
+
+        results = int(self.cursor.execute(query))
+        if results > 0:
+            result1 = self.cursor.fetchall()
+        else:
+            data = []
+
+        if len(result1) > 0:
+            # Let's parse the repositories
+            for result in result1:
+                data.append(result[0])
+
         return data
 
     def close_session(self):
