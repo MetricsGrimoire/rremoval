@@ -29,5 +29,57 @@ class CVSAnalY(Backend):
         print repositories
 
     def repository_removal(self, repository):
-        pass
+
+        # Remove repository
+        query = """ DELETE FROM repositories
+                    WHERE uri = '%s'""" % (repository)
+        self.session.execute(query)
+
+        # Remove commits
+        query = """ DELETE FROM scmlog
+                    WHERE repository_id not in (
+                        SELECT distinct(id)
+                        FROM repositories) """
+        self.session.execute(query)
+
+        # Remove actions
+        query = """ DELETE FROM actions
+                    WHERE commit_id not in (
+                        SELECT distinct(id)
+                        FROM scmlog) """
+        self.session.execute(query)
+
+        # Remove branches
+        query = """ DELETE FROM branches
+                    WHERE id not in (
+                        SELECT distinct(branch_id)
+                        FROM actions) """
+        self.session.execute(query)
+
+        # Remove commits_lines
+        query = """ DELETE FROM commits_lines
+                    WHERE commit_id not in (
+                        SELECT distinct(id)
+                        FROM scmlog) """
+        self.session.execute(query)
+
+        # Remove files
+        query = """ DELETE FROM files
+                    WHERE repository_id not in (
+                        SELECT distinct(id)
+                        FROM repositories) """
+        self.session.execute(query)
+
+        # Remove tags
+        query = """ DELETE FROM tag_revisions
+                    WHERE commit_id not in (
+                        SELECT distinct(id)
+                        FROM scmlog) """
+        self.session.execute(query)
+
+        query = """ DELETE FROM tags
+                    WHERE id not in (
+                        SELECT distinct(tag_id)
+                        FROM tag_revisions) """
+        self.session.execute(query)
 

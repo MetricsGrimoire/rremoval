@@ -44,13 +44,10 @@ class Database(object):
         results = int(self.cursor.execute(query))
         if results > 0:
             result1 = self.cursor.fetchall()
-        else:
-            data = []
-
-        if len(result1) > 0:
-            # Let's parse the repositories
-            for result in result1:
-                data.append(result[0])
+            if len(result1) > 0:
+                # Let's parse the repositories
+                for result in result1:
+                    data.append(result[0])
 
         return data
 
