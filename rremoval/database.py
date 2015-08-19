@@ -48,7 +48,7 @@ class Database(object):
                 # Let's parse the repositories
                 for result in result1:
                     data.append(result[0])
-
+        self.db.commit()
         return data
 
     def close_session(self):

@@ -29,4 +29,19 @@ class Eventizer(Backend):
         print trackers
 
     def repository_removal(self, repository):
-       pass
+
+        print repository
+        # Remove events
+        query = """ DELETE FROM events
+                    WHERE event_url = '%s' """ % (repository)
+        print query
+        self.session.execute(query)
+
+        # Remove rsvps
+        query = """ DELETE FROM rsvps
+                    WHERE event_id not in (
+                        SELECT distinct(id)
+                        FROM events) """
+        self.session.execute(query)
+
+
