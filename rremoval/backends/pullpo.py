@@ -23,11 +23,16 @@ from rremoval.backends import Backend
 class Pullpo(Backend):
 
     def repositories_list(self):
-       query = """SELECT repository
+       query = """SELECT url
                   FROM repositories"""
        repositories = self.session.execute(query)
        print repositories
 
     def repository_removal(self, repository):
-        pass
+
+        # This query assumes the use of INNODB engine
+        # The rest of the info is removed in cascade
+        query = """ DELETE FROM repositories
+                    WHERE url = '%s' """ % (repository)
+        self.session.execute(query)
 
