@@ -29,4 +29,17 @@ class MLStats(Backend):
         print mailing_lists
 
     def repository_removal(self, repository):
-        pass
+
+        # Remove compressed_files mailing list
+        # This code assumes this database is using INNODB engine
+        query = """ DELETE FROM compressed_files
+                    WHERE mailing_list_url = '%s' """ % (repository)
+        self.session.execute(query)
+
+        # Remove mailing lists
+        # This code assumes this database is using INNODB engine
+        # This will delete the rest of the information in cascade
+        query = """ DELETE FROM mailing_lists
+                    WHERE mailing_list_url = '%s' """ % (repository)
+        self.session.execute(query)
+
