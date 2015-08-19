@@ -29,4 +29,16 @@ class IRC(Backend):
         print channels
 
     def repository_removal(self, repository):
-        pass
+
+        # Remove channel
+        query = """ DELETE FROM channels
+                    WHERE name = '%s' """ % (repository)
+        self.session.execute(query)
+
+        # Remove log messages
+        query = """ DELETE FROM irclog
+                    WHERE channel_id not in (
+                        SELECT distinct(id)
+                        FROM channels) """
+        self.session.execute(query)
+
