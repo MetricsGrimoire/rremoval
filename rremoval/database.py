@@ -29,6 +29,9 @@ class Database(object):
     def __init__(self, dbuser, dbpassword, dbname, hostname="localhost", port=3306):
         """ Start session and init database variables """
 
+        self.dbuser = dbuser
+        self.dbname  = dbname
+
         self.db = MySQLdb.connect(host=hostname,
                              port=int(port),
                              user=dbuser,

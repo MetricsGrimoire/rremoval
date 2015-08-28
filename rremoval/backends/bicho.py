@@ -59,3 +59,37 @@ class Bicho(Backend):
                 """
         self.session.execute(query)
 
+        # Check log table
+        query = """ SELECT TABLE_NAME
+                    FROM INFORMATION_SCHEMA.TABLES
+                    WHERE TABLE_SCHEMA='%s' AND
+                          TABLE_NAME like '%s_log_%s'
+                """ % (self.session.dbname, "%", "%")
+        table_name = self.session.execute(query)
+        table_name = table_name[0]
+        if len(table_name):
+            # This is an optional table and this may not exist
+            query = """ DELETE FROM %s
+                        WHERE issue_id not in (
+                            SELECT distinct(id)
+                            FROM issues)
+                    """ % (table_name)
+            self.session.execute(query)
+
+        # Check ext table
+        query = """ SELECT TABLE_NAME
+                    FROM INFORMATION_SCHEMA.TABLES
+                    WHERE TABLE_SCHEMA='%s' AND
+                          TABLE_NAME like '%s_ext_%s'
+                """ % (self.session.dbname, "%", "%")
+        table_name = self.session.execute(query)
+        table_name = table_name[0]
+        if len(table_name):
+            # This is an optional table and this may not exist
+            query = """ DELETE FROM %s
+                        WHERE issue_id not in (
+                            SELECT distinct(id)
+                            FROM issues)
+                    """ % (table_name)
+            self.session.execute(query)
+
